@@ -66,6 +66,16 @@ void UTP_WeaponComponent::Fire()
 	}
 }
 
+void UTP_WeaponComponent::SetFireRate(float InFireRate)
+{
+	FireRate = InFireRate;
+
+	if (HoldActionTimerHandle.IsValid())
+	{
+		GetWorld()->GetTimerManager().SetTimer(HoldActionTimerHandle, this, &UTP_WeaponComponent::Fire, FireRate, true);
+	}
+}
+
 bool UTP_WeaponComponent::AttachWeapon(AFirstPersonCharacter* TargetCharacter)
 {
 	Character = TargetCharacter;
@@ -95,15 +105,42 @@ bool UTP_WeaponComponent::AttachWeapon(AFirstPersonCharacter* TargetCharacter)
 		if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerController->InputComponent))
 		{
 			// Fire
-			EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &UTP_WeaponComponent::Fire);
+			EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &UTP_WeaponComponent::PreFire);
+			EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Completed, this, &UTP_WeaponComponent::PostFire);
 		}
 	}
 
 	return true;
 }
 
+void UTP_WeaponComponent::PreFire()
+{
+	UE_LOG(LogTemp, Log, TEXT("PreFire"));
+
+	// Only start the timer once the action is triggered
+	if (!GetWorld()->GetTimerManager().IsTimerActive(HoldActionTimerHandle))
+	{
+		// Start a repeating timer with a specific interval (e.g., 0.5 seconds)
+		GetWorld()->GetTimerManager().SetTimer(HoldActionTimerHandle, this, &UTP_WeaponComponent::Fire, FireRate, true);
+	}
+}
+
+void UTP_WeaponComponent::PostFire()
+{
+	if(HoldActionTimerHandle.IsValid())
+	{
+		GetWorld()->GetTimerManager().ClearTimer(HoldActionTimerHandle);
+	}
+	UE_LOG(LogTemp, Log, TEXT("PostFire"));
+}
+
 void UTP_WeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
+	if(HoldActionTimerHandle.IsValid())
+	{
+		GetWorld()->GetTimerManager().ClearTimer(HoldActionTimerHandle);
+	}
+	
 	if (Character == nullptr)
 	{
 		return;

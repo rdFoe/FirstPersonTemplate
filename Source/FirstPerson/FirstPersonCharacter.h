@@ -7,6 +7,7 @@
 #include "Logging/LogMacros.h"
 #include "FirstPersonCharacter.generated.h"
 
+class UTP_WeaponComponent;
 class UInputComponent;
 class USkeletalMeshComponent;
 class UCameraComponent;
@@ -67,5 +68,7 @@ public:
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
+	UPROPERTY()
+	UTP_WeaponComponent* WeaponComp;
 };
 

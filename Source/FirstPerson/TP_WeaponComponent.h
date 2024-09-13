@@ -45,10 +45,17 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Weapon")
 	bool AttachWeapon(AFirstPersonCharacter* TargetCharacter);
 
+	UFUNCTION()
+	void PreFire();
+	
+	UFUNCTION()
+	void PostFire();
 	/** Make the weapon Fire a Projectile */
 	UFUNCTION(BlueprintCallable, Category="Weapon")
 	void Fire();
 
+	void SetFireRate(float InFireRate);
+	
 protected:
 	/** Ends gameplay for this component. */
 	UFUNCTION()
@@ -57,4 +64,7 @@ protected:
 private:
 	/** The Character holding this weapon*/
 	AFirstPersonCharacter* Character;
+
+	FTimerHandle HoldActionTimerHandle;
+	float FireRate = 0.5f;
 };
