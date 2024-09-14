@@ -14,9 +14,8 @@ enum class EBTS_SkillFinishReason : uint8
 	ActivationCanceled
 };
 /**
- * 
+ * base class for all skills
  */
-
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSkillRegistered, UBTS_SkillDataAsset*, RegisteredSkill);
@@ -30,6 +29,8 @@ class FIRSTPERSON_API UBTS_SkillBase : public UObject
 	GENERATED_BODY()
 
 public:
+	UFUNCTION()
+	void TryExecuteSkill();
 	UFUNCTION()
 	virtual void OnSkillExecuted();
 	UFUNCTION()
@@ -54,14 +55,23 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="Skill")
 	FOnSkillCooldownCompleted OnSkillCooldownCompleted;
 
+	UFUNCTION(BlueprintPure, Category="Skill")
+	bool GetIsActivated() const { return bIsActivated; }
+	
+	UFUNCTION(BlueprintPure, Category="Skill")
+	bool GetIsOnCooldown() const { return bIsOnCooldown; }
+	
 protected:
 	UPROPERTY()
 	TObjectPtr<UBTS_SkillDataAsset> SkillDataAsset;
 	UPROPERTY()
 	TObjectPtr<UBTS_SkillActorComponent> SkillActorComponent;
-	
+
+	// used for checking activiation of a skill to prevent spamming
+	bool bIsActivated = false;
 	bool bIsOnCooldown = false;
 
 private:
 	FTimerHandle SkillTimerHandle;
+	FTimerHandle CooldownTimerHandle;
 };

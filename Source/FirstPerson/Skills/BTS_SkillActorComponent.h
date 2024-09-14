@@ -11,6 +11,10 @@ class UInputMappingContext;
 class UBTS_SkillDataAsset;
 class UBTS_SkillBase;
 
+/**
+ * handles creation of skills and tracks runtime
+ * attached to PlayerController
+ */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class FIRSTPERSON_API UBTS_SkillActorComponent : public UActorComponent
 {
@@ -21,7 +25,7 @@ public:
 	UBTS_SkillActorComponent();
 
 	UFUNCTION(BlueprintCallable)
-	TArray<UBTS_SkillBase*> GetCreatedSkills() { return CreatedSkills; }
+	TArray<UBTS_SkillBase*> GetCreatedSkills() const { return CreatedSkills; }
 
 	void InitializeSkills();
 protected:

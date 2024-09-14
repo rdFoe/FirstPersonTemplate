@@ -115,8 +115,6 @@ bool UTP_WeaponComponent::AttachWeapon(AFirstPersonCharacter* TargetCharacter)
 
 void UTP_WeaponComponent::PreFire()
 {
-	UE_LOG(LogTemp, Log, TEXT("PreFire"));
-
 	// Only start the timer once the action is triggered
 	if (!GetWorld()->GetTimerManager().IsTimerActive(HoldActionTimerHandle))
 	{
@@ -131,7 +129,6 @@ void UTP_WeaponComponent::PostFire()
 	{
 		GetWorld()->GetTimerManager().ClearTimer(HoldActionTimerHandle);
 	}
-	UE_LOG(LogTemp, Log, TEXT("PostFire"));
 }
 
 void UTP_WeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)

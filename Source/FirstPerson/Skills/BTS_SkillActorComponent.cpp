@@ -87,7 +87,7 @@ void UBTS_SkillActorComponent::InitializeSkills()
 				generatedSkill->RegisterSkill(Element, this);
 				CreatedSkills.Add(generatedSkill);
 
-				EnhancedInputComponent->BindAction(Element->InputAction, ETriggerEvent::Triggered, generatedSkill, &UBTS_SkillBase::OnSkillExecuted);
+				EnhancedInputComponent->BindAction(Element->InputAction, ETriggerEvent::Triggered, generatedSkill, &UBTS_SkillBase::TryExecuteSkill);
 			}
 		}
 		else

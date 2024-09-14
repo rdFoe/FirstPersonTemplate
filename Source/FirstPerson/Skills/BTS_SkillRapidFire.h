@@ -18,9 +18,4 @@ protected:
 	virtual void OnSkillExecuted() override;
 	virtual void OnSkillFinished() override;
 	virtual void OnCooldownFinished() override;
-
-	virtual void BeginDestroy() override;
-
-private:
-	FTimerHandle CooldownTimerHandle;
 };
